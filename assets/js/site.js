@@ -7,6 +7,50 @@ document.querySelectorAll('.sanctuary-scroll-button').forEach((button) => {
     });
 });
 
+const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
+if (mobileMenuToggle && mobileMenu) {
+    let mobileMenuCloseTimer;
+    const closeMobileMenu = () => {
+        if (mobileMenu.hidden || mobileMenu.classList.contains('is-closing')) return;
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+        mobileMenuToggle.setAttribute('aria-label', 'Buka menu');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            mobileMenu.hidden = true;
+            return;
+        }
+        mobileMenu.classList.add('is-closing');
+        mobileMenuCloseTimer = window.setTimeout(() => {
+            mobileMenu.hidden = true;
+            mobileMenu.classList.remove('is-closing');
+        }, 180);
+    };
+
+    mobileMenuToggle.addEventListener('click', () => {
+        const isOpen = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+        if (isOpen) {
+            closeMobileMenu();
+        } else {
+            window.clearTimeout(mobileMenuCloseTimer);
+            mobileMenu.classList.remove('is-closing');
+            mobileMenu.hidden = false;
+            mobileMenuToggle.setAttribute('aria-expanded', 'true');
+            mobileMenuToggle.setAttribute('aria-label', 'Tutup menu');
+        }
+    });
+
+    mobileMenu.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMobileMenu));
+    document.addEventListener('click', (event) => {
+        if (!mobileMenu.contains(event.target) && !mobileMenuToggle.contains(event.target)) closeMobileMenu();
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !mobileMenu.hidden) {
+            closeMobileMenu();
+            mobileMenuToggle.focus();
+        }
+    });
+}
+
 const eventDropdown = document.querySelector('.event-dropdown');
 if (eventDropdown) {
     const eventButton = eventDropdown.querySelector('button');
