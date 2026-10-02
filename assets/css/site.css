@@ -63,6 +63,39 @@
     background: #f1eee8;
 }
 
+.mobile-menu[hidden] { display: none; }
+.mobile-menu:not([hidden]) {
+    display: block;
+    z-index: 60;
+    pointer-events: auto;
+    animation: mobileMenuFadeIn .2s ease-out both;
+}
+.mobile-menu.is-closing { animation: mobileMenuFadeOut .18s ease-in both; pointer-events: none; }
+@keyframes mobileMenuFadeIn {
+    from { opacity: 0; transform: translateY(-0.35rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes mobileMenuFadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-0.25rem); }
+}
+.mobile-menu > a,
+.mobile-menu-group > a {
+    display: block;
+    padding: 0.75rem 0.85rem;
+    color: #4a4a43;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.mobile-menu > a:hover,
+.mobile-menu-group > a:hover,
+.mobile-menu > a:focus,
+.mobile-menu-group > a:focus { background: #f1eee8; color: #252620; }
+.mobile-menu-group { padding: 0.5rem 0; border-top: 1px solid #d8d0c4; border-bottom: 1px solid #d8d0c4; }
+.mobile-menu-group > span { display: block; padding: 0.5rem 0.85rem; color: #8d6949; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.mobile-menu-group > a { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+
 body {
     animation: pageFadeIn .7s ease-out both;
 }
@@ -75,7 +108,9 @@ body {
 @media (prefers-reduced-motion: reduce) {
     body { animation: none; }
     .event-dropdown-menu,
+    .mobile-menu:not([hidden]),
     .event-dropdown-arrow { transition: none; }
+    .mobile-menu:not([hidden]) { animation: none; }
 }
 
 /* Reveal content as it enters the viewport while scrolling. */
